@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import api from "../utils/api";
-import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import FeaturesCard from "../components/FeaturesCard";
 import HeroVid from "../assets/weather-video.mp4";
 import { Activity, CloudLightningIcon, LucideBolt, Zap } from "lucide-react";
-import Footer from "../components/Footer";
-import {useNavigate} from 'react-router'
+import { useNavigate } from "react-router";
+import CurrentLocationBtn from "../components/CurrentLocationBtn";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -48,11 +46,16 @@ const Home = () => {
           <p className="text-sm text-white opacity-80">
             Simple forecast with all the details you need in one place.
           </p>
-          <SearchBar onSearch={(city) => {
-            navigate({
-                pathname : `/weather/${city}`,
-            })
-          }} />
+          <SearchBar
+            onSearch={(city) => {
+              navigate({
+                pathname: `/weather`,
+                search: `?city=${city}`,
+              });
+            }}
+          />
+
+          <CurrentLocationBtn />
 
           <video
             ref={videoRef}

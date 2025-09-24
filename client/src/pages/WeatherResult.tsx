@@ -6,11 +6,13 @@ import {
   Eye,
   Gauge,
   Loader,
+  MapPin,
+  Pin,
   SunMedium,
   Wind,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useNavigation, useParams } from "react-router";
+import { useNavigate, useNavigation, useParams, useSearchParams } from "react-router";
 import CurrentConditionCard from "../components/CurrentConditionCard";
 // import weatherIcon from "../assets/images/cloudy.png";
 import ForecastCard from "../components/ForecastCard";
@@ -20,7 +22,10 @@ import Skeleton from "../components/Skeleton";
 import Forecast from "../components/Forecast";
 
 const WeatherResult = () => {
-  const { city } = useParams();
+  const [searchParams] = useSearchParams();
+  const city = searchParams.get("city");
+  const lat = searchParams.get("lat");
+  const lon = searchParams.get("lon");
   const navigate = useNavigate();
   const [weather, setWeather] = useState<any>(null);
   const [forecast, setForecast] = useState<any>(null);
@@ -33,11 +38,21 @@ const WeatherResult = () => {
       setWeather(null);
       setForecast(null);
 
-      const res = await api.get(`/api/weather?city=${city}`);
-      setWeather(res.data.current);
-      setForecast(res.data.forecast);
-      setLoading(false);
-    } catch (err) {
+      if (city) {
+        const res = await api.get(`/api/weather?city=${city}`);
+        setWeather(res.data.current);
+        setForecast(res.data.forecast);
+        setLoading(false);
+        return;
+      }
+      if (lat && lon) {
+        const res = await api.post(`/api/weather/current-location`, { lat, lon });
+        setWeather(res.data?.current);
+        setForecast(res.data?.forecast);
+        setLoading(false);
+        return;
+      }
+    } catch (err: any) {
       console.error(
         "Error fetching weather:",
         err.response?.data || err.message
@@ -50,7 +65,7 @@ const WeatherResult = () => {
 
   useEffect(() => {
     fetchWeather();
-  }, [city]);
+  }, []);
 
   if (loading) {
     return (
@@ -86,8 +101,8 @@ const WeatherResult = () => {
       >
         <ChevronLeft /> Back To Home
       </button>
-      <h2 className=" text-gray-800 dark:text-white">
-        Weather Result for <strong>{weather?.name}</strong>
+      <h2 className=" text-gray-800 dark:text-white flex items-center gap-1">
+        Weather in <span className="flex items-center justify-center gap-1"> <MapPin size={20} /> <strong>{weather?.name}</strong></span>
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
@@ -110,7 +125,7 @@ const WeatherResult = () => {
             </p>
           </div>
           <img
-            src={`https://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`}
+            src={`https://openweathermap.org/img/wn/${weather.weather[0]?.icon}@2x.png`}
             alt="weather icon"
             className="size-28"
           />
@@ -151,8 +166,13 @@ const WeatherResult = () => {
       {/* forecast  starts*/}
       <div className="">
         <h3 className="my-2 mt-6 dark:text-white">5 days forecast</h3>
-
-        <Forecast forecast={forecast} />
+        {
+          forecast ? (
+            <Forecast forecast={forecast} />
+          ) : (
+            <p className="text-gray-500/60 text-center py-10 text-sm">No forecast available</p>
+          )
+        }
       </div>
     </main>
   );

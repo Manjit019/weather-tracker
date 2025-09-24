@@ -4,7 +4,7 @@ import ForecastCard from './ForecastCard';
 import { FormatDate } from '../utils/FormatDate';
 
 
-export default function Forecast({forecast}) {
+export default function Forecast({forecast}:{forecast: any}) {
 
   const [dailyForecast, setDailyForecast] = useState<any[]>([]);
 
@@ -21,11 +21,11 @@ export default function Forecast({forecast}) {
     });
 
     return Object.entries(days).map(([date, items]: [any, any]) => {
-      const temps = items.map(i => i.main.temp);
+      const temps = items.map((i:any) => i.main.temp);
       const min = Math.min(...temps);
       const max = Math.max(...temps);
 
-      const noon = items.find(i => {
+      const noon = items.find((i:any) => {
           const hour = new Date(i.dt * 1000).getHours();
           return hour === 12;
       }) || items[Math.floor(items.length/2)];

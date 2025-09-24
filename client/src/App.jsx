@@ -15,9 +15,13 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/weather/:city",
+        path: "/weather",
         element: <WeatherResult />,
       },
+      {
+        path : "/weather/current-location",
+        element: <WeatherResult />
+      }
     ],
   },
   {
