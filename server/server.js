@@ -7,7 +7,12 @@ import weatherRoutes from "./routes/weather.js";  // ✅ Default import
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors(
+  {
+    origin : '*',
+    credentials : true
+  }
+));
 app.use(express.json());
 
 app.get("/", (req, res) => res.send("Hello from Weather Tracker!"));
