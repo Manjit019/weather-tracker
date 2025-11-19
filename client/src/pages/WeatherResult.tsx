@@ -69,7 +69,7 @@ const WeatherResult = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen p-4 px-16 space-y-4 dark:bg-gray-900">
+      <div className="min-h-screen p-4 md:px-16 space-y-4 dark:bg-gray-900">
         <Skeleton className="w-32 h-8 mt-10 rounded-md" />
         <Skeleton className="w-64 h-8 my-2 rounded-md" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-4">
@@ -78,9 +78,9 @@ const WeatherResult = () => {
         </div>
         <Skeleton className="w-56 h-8 my-4" />
 
-        <div className="flex mt-4 gap-4 items-center overflow-x-visible flex-wrap">
+        <div className="flex mt-4 gap-4 items-center overflow-x-visible ">
           {Array.from({ length: 5 }).map((_, idx: number) => (
-            <Skeleton key={idx} className="w-28 h-36" />
+            <Skeleton key={idx} className="min-w-28 h-36" />
           ))}
         </div>
       </div>

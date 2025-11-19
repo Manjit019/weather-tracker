@@ -26,7 +26,7 @@ function Header() {
   return (
     <header className="flex justify-between items-center p-4 bg-gradient-to-b from-violet-700 to-violet-400 text-white dark:from-violet-900 dark:to-violet-950 shadow ">
       <h3 className="flex items-center gap-1">
-        <CloudDrizzle /> Weather Forecast
+        <CloudDrizzle /> Weather Fetcher
       </h3>
 
       <button
